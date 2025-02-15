@@ -5,3 +5,7 @@ appsettings.Development.json
 *.sln
 *.user
 Properties
+Migrations
+DustSuckerDB
+DustSuckerDB-shm
+DustSuckerDB-wal
