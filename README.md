@@ -10,16 +10,19 @@ DustSuckerApi - это API для управления продажами пыл
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 
 ## 🗄 База данных
-![Database Schema](https://github.com/Tonitruc/DustSuckerWebApp/tree/master/DbSchema/db.png)
+![Database Schema](https://raw.githubusercontent.com/Tonitruc/DustSuckerWebApp/master/DbSchema/db.png)
 
 ## 📦 Установка и запуск
 
 ### 1. Клонирование репозитория
 ```bash
 git clone https://github.com/Tonitruc/DustSuckerWebApp.git
-cd DustSuckerApi ```
+cd DustSuckerApi 
+```
 
 ### 2. Запуск через докер
+```bash
 docker build -t dustsuckerapi .
 docker run -p 5000:5000 dustsuckerapi
+```
 
