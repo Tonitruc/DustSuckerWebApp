@@ -52,5 +52,16 @@ namespace DustSuckerWebApp.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _service.DeleteAsync(id);
+
+            if(result)
+                return Ok(result);
+
+            return BadRequest("Invalid id");
+        }
+
     }
 }

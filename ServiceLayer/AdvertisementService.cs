@@ -74,5 +74,17 @@ namespace DustSuckerWebApp.ServiceLayer
 
             return dto;
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var exist = await _context.Advertisements
+                          .SingleOrDefaultAsync(e => e.Id == id);
+
+            if (exist == null) return false;
+
+            _context.Remove(exist);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

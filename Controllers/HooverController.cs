@@ -53,5 +53,20 @@ namespace DustSuckerWebApp.Controllers
                                         Errors = ex.ValidationResult });
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            try
+            {
+                var result = await _service.Remove(id);
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

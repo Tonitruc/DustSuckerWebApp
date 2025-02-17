@@ -22,6 +22,8 @@ namespace DustSuckerWebApp.Extensions
                         .ForMember(dest => dest.HooverId, opt => opt.MapFrom(src => 
                         src.HooverId));
 
+            CreateMap<AddUserDto, User>();
+
         }
     }
 }

@@ -46,5 +46,20 @@ namespace DustSuckerWebApp.ServiceLayer
 
             return result.Entity;
         }
+
+        public async Task<bool> Remove(int id)
+        {
+            var exist = await _context.Hoovers
+                .Include(e => e.Advertisements)
+                .SingleOrDefaultAsync(e => e.Id == id);
+
+            if (exist == null) return false;
+            if (!exist.Advertisements.Any())
+                throw new ValidationException("Hoover contains with advertisements");
+
+            _context.Remove(exist);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

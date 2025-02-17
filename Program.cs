@@ -2,6 +2,7 @@ using DustSuckerWebApp.DataLayer;
 using DustSuckerWebApp.Extensions;
 using DustSuckerWebApp.ServiceLayer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,19 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<HooverService>();
 builder.Services.AddScoped<AdvertisementService>();
+builder.Services.AddScoped<UserService>();
+
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Dust Sucker API",
+        Version = "v1",
+        Description = "Описание API",
+    });
+});
 
 builder.Services.AddControllers();
 
@@ -19,6 +33,16 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        options.RoutePrefix = string.Empty; 
+    });
+}
 
 app.UseAuthorization();
 
