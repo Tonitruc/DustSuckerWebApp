@@ -7,21 +7,20 @@ namespace DustSuckerWebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HooverController : ControllerBase
+    public class AdvertisementController : ControllerBase
     {
-        private readonly HooverService _service;
+        private readonly AdvertisementService _service;
 
 
-        public HooverController(HooverService service)
+        public AdvertisementController(AdvertisementService advertisementService)
         {
-            _service = service;
+            _service = advertisementService;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var hooversList = await _service.GetHoovers();
+            var hooversList = await _service.GetAsync();
 
             return Ok(hooversList);
         }
@@ -30,8 +29,8 @@ namespace DustSuckerWebApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var hoover = await _service.GetHoover(id);
-            if(hoover == null)
+            var hoover = await _service.GetById(id);
+            if (hoover == null)
             {
                 return BadRequest("Invalid Id.");
             }
@@ -40,18 +39,18 @@ namespace DustSuckerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddHooverDto dto)
+        public async Task<IActionResult> Add(AddAdvertisementDto dto)
         {
             try
             {
-                var result = await _service.AddHoover(dto);
+                var result = await _service.AddAsync(dto);
                 return Ok(result);
             }
-            catch(ValidationException ex)
+            catch (ValidationException ex)
             {
-                return BadRequest(new { Message = ex.Message, 
-                                        Errors = ex.ValidationResult });
+                return BadRequest(new { ex.Message });
             }
         }
+
     }
 }

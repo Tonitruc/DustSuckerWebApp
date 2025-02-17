@@ -9,3 +9,4 @@ Migrations
 DustSuckerDB
 DustSuckerDB-shm
 DustSuckerDB-wal
+*.config

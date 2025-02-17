@@ -9,7 +9,7 @@ namespace DustSuckerWebApp.DataLayer
         public static async Task<ImmutableList<ValidationResult>> SaveChangeWithValidationAsync(this DbContext context)
         {
             var result = ExecuteValidation(context);
-            if (result.Any()) return result;
+            if (!result.IsEmpty) return result;
 
             context.ChangeTracker.AutoDetectChangesEnabled = false;
             try
@@ -26,7 +26,7 @@ namespace DustSuckerWebApp.DataLayer
         public static ImmutableList<ValidationResult> SaveChangeWithValidation(this DbContext context)
         {
             var result = ExecuteValidation(context);
-            if (result.Any()) return result;
+            if (!result.IsEmpty) return result;
 
             context.ChangeTracker.AutoDetectChangesEnabled = false; 
             try

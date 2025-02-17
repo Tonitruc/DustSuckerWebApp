@@ -1,6 +1,9 @@
-﻿using DustSuckerWebApp.DataLayer;
+﻿using AutoMapper;
+using DustSuckerWebApp.DataLayer;
 using DustSuckerWebApp.Models;
+using DustSuckerWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace DustSuckerWebApp.ServiceLayer
 {
@@ -8,10 +11,13 @@ namespace DustSuckerWebApp.ServiceLayer
     {
         private readonly AppDbContext _context;
 
+        private readonly IMapper _mapper;
 
-        public HooverService(AppDbContext context)
+
+        public HooverService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
@@ -23,6 +29,22 @@ namespace DustSuckerWebApp.ServiceLayer
         public async Task<Hoover?> GetHoover(int id)
         {
             return await _context.Hoovers.SingleOrDefaultAsync(h => h.Id == id);
+        }
+
+        public async Task<Hoover?> AddHoover(AddHooverDto dto)
+        {
+            var exist = await _context.Hoovers
+                                      .SingleOrDefaultAsync(e => e.Model == dto.Model && e.Brand == dto.Brand);
+
+            if (exist != null)
+                throw new ValidationException("The model for one brand must be unique.");
+
+            var result = await _context.AddAsync(_mapper.Map<Hoover>(dto));
+            var errors = await _context.SaveChangeWithValidationAsync();
+            if(!errors.IsEmpty)
+                throw new ValidationException(errors.First().ErrorMessage);
+
+            return result.Entity;
         }
     }
 }

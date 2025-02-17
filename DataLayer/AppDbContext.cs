@@ -9,5 +9,7 @@ namespace DustSuckerWebApp.DataLayer
         
 
         public DbSet<Hoover> Hoovers { get; set; }
+
+        public DbSet<Advertisement> Advertisements { get; set; }
     }
 }
