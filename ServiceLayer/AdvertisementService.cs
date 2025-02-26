@@ -21,50 +21,162 @@ namespace DustSuckerWebApp.ServiceLayer
             _mapper = mapper;
         }
 
-
-        public async Task<List<ShortAdvertisementDto>> GetAsync()
+        public async Task<List<AdvertisementDto>> GetAsync()
         {
             return await _context.Advertisements
                 .Include(ad => ad.Hoover)
-                .Select(ad => 
-            new ShortAdvertisementDto
-            {
-                Title = ad.Title,
-                Description = ad.Description,
-                HooverId = ad.HooverId,
-                ImageUrls = ad.ImageUrls,
-                Status = ad.Status,
-                Cost = ad.Cost,
-            }).ToListAsync();
+                .Select(ad => _mapper.Map<AdvertisementDto>(ad)).ToListAsync();
         }
 
-        public async Task<ShortAdvertisementDto?> GetById(int id)
+        public async Task<List<AdvertisementShortDto>> GetShortAsync()
         {
-            var result = await _context.Advertisements
+            return await _context.Advertisements
+                .Include(ad => ad.Hoover)
+                .Select(ad => _mapper.Map<AdvertisementShortDto>(ad)).ToListAsync();
+        }
+
+        public async Task<AdvertisementDto?> GetByIdAsync(int id)
+        {
+            var exist = await _context.Advertisements
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if(result == null) return null;
+            if (exist == null) return null;
 
-            return new ShortAdvertisementDto
+            return _mapper.Map<AdvertisementDto>(exist);
+        }
+
+        public async Task<AdvertisementDto?> GetByTitleAsync(string title)
+        {
+            var exist = await _context.Advertisements
+                .Include(e => e.Hoover)
+                .FirstOrDefaultAsync(a => a.Title == title);
+            if (exist == null) return null;
+
+            return _mapper.Map<AdvertisementDto>(exist);
+        }
+
+        public async Task<AdvertisementShortDto?> GetShortByIdAsync(int id)
+        {
+            var exist = await _context.Advertisements
+                .Include(e => e.Hoover)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            if(exist == null) return null;
+
+            return _mapper.Map<AdvertisementShortDto>(exist);
+        }
+
+        public async Task<AdvertisementShortDto?> GetShortByTitleAsync(string title)
+        {
+            var exist = await _context.Advertisements
+                .Include(e => e.Hoover)
+                .FirstOrDefaultAsync(a => a.Title == title);
+            if (exist == null) return null;
+
+            return _mapper.Map<AdvertisementShortDto>(exist);
+        }
+
+        public async Task<List<string>?> AddImageUrlByIdAsync(int id, string imageUrl)
+        {
+            var exist = await GetByIdAsync(id);
+
+            if (exist == null) return null;
+
+            if(!exist.ImageUrls.Contains(imageUrl))
+                exist.ImageUrls.Add(imageUrl);
+
+            await _context.SaveChangesAsync();
+            return exist.ImageUrls;
+        }
+
+        public async Task<List<string>?> RemoveImageUrlByIdAsync(int id, string imageUrl)
+        {
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Id == id);
+
+            if (exist == null) return null;
+
+            exist.ImageUrls.Remove(imageUrl);
+
+            await _context.SaveChangesAsync();
+            return exist.ImageUrls;
+        }
+
+        public async Task<List<string>?> AddImagesUrlByIdAsync(int id, List<string> imagesUrl)
+        {
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Id == id);
+
+            if (exist == null) return null;
+
+            foreach (var imageUrl in imagesUrl)
             {
-                Title = result.Title,
-                Description = result.Description,
-                HooverId = result.HooverId,
-                ImageUrls = result.ImageUrls,
-                Status = result.Status,
-                Cost = result.Cost,
-            };
+                if (!exist.ImageUrls.Contains(imageUrl))
+                    exist.ImageUrls.Add(imageUrl);
+            }
+
+            await _context.SaveChangesAsync();
+            return exist.ImageUrls;
+        }
+
+        public async Task<bool?> SetAsMainImageByIdAsync(int id, string imageUrl)
+        {
+            var exist = await GetByIdAsync(id);
+
+            if (exist == null) return null;
+
+            exist.ImageUrls.Remove(imageUrl);
+            exist.ImageUrls.Insert(0, imageUrl);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<string>?> AddImageUrlByTitleAsync(string title, string imageUrl)
+        {
+            var exist = await GetByTitleAsync(title);
+
+            if (exist == null) return null;
+
+            if (!exist.ImageUrls.Contains(imageUrl))
+                exist.ImageUrls.Add(imageUrl);
+
+            return exist.ImageUrls;
+        }
+
+        public async Task<List<string>?> RemoveImageUrlByTitleAsync(string title, string imageUrl)
+        {
+            var exist = await GetByTitleAsync(title);
+
+            if (exist == null) return null;
+
+            exist.ImageUrls.Remove(imageUrl);
+
+            await _context.SaveChangesAsync();
+            return exist.ImageUrls;
+        }
+
+        public async Task<bool?> SetAsMainImageByTitleAsync(string title, string imageUrl)
+        {
+            var exist = await GetByTitleAsync(title);
+
+            if (exist == null) return null;
+
+            exist.ImageUrls.Remove(imageUrl);
+            exist.ImageUrls.Insert(0, imageUrl);
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<AddAdvertisementDto?> AddAsync(AddAdvertisementDto dto)
         {
-            var exist = await _context.Advertisements
-                          .SingleOrDefaultAsync(e => e.Title == dto.Title);
+            var exist = await GetByTitleAsync(dto.Title);
 
             if (exist != null)
                 throw new ValidationException("The title for one ad must be enique.");
 
-            if (!DateTime.TryParseExact(dto.PublishDate, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            if (!DateTime.TryParseExact(dto.PublishDate, "dd.MM.yyyy HH:mm",
+                            CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
                 throw new ValidationException("Invalid date format. Example of correct date: dd.mm.yyyy HH:MM");
 
             var result = await _context.AddAsync(_mapper.Map<Advertisement>(dto));
@@ -75,10 +187,20 @@ namespace DustSuckerWebApp.ServiceLayer
             return dto;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            var exist = await _context.Advertisements
-                          .SingleOrDefaultAsync(e => e.Id == id);
+            var exist = await GetByIdAsync(id);
+
+            if (exist == null) return false;
+
+            _context.Remove(exist);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public async Task<bool> DeleteByTitleAsync(string title)
+        {
+            var exist = await GetByTitleAsync(title);
 
             if (exist == null) return false;
 

@@ -1,6 +1,9 @@
-﻿namespace DustSuckerWebApp.ViewModels
+﻿using DustSuckerWebApp.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace DustSuckerWebApp.ViewModels
 {
-    public class ShortAdvertisementDto
+    public class AdvertisementDto
     {
         public string Title { get; set; }
 
@@ -10,14 +13,13 @@
 
         public string Status { get; set; }
 
-        public DateTime PublishDate { get; set; }
+        public string PublishDate { get; set; }
 
         public List<string> ImageUrls { get; set; }
 
-        public int HooverId { get; set; }
+        public HooverShortDto Hoover { get; set; }
 
-
-        public ShortAdvertisementDto()
+        public AdvertisementDto()
         {
             Title = string.Empty;
             Description = string.Empty;
