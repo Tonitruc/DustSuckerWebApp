@@ -5,7 +5,7 @@ using DustSuckerWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ServiceLayer
+namespace DustSuckerWebApp.ServiceLayer.UserServices
 {
     public class UserService
     {
@@ -57,7 +57,7 @@ namespace DustSuckerWebApp.ServiceLayer
         {
             var exist = await GetByEmail(email);
 
-            if(exist == null)
+            if (exist == null)
                 return false;
 
             _context.Remove(exist);

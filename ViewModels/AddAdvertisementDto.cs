@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DustSuckerWebApp.ViewModels
 {
+    /// <summary>
+    /// Dto for add advertisement 
+    /// </summary>
     public class AddAdvertisementDto
     {
         public string Title { get; set; }
@@ -15,6 +18,9 @@ namespace DustSuckerWebApp.ViewModels
 
         public string PublishDate { get; set; }
 
+        /// <summary>
+        /// First image in url will be used as main image
+        /// </summary>
         public List<string> ImageUrls { get; set; }
 
 

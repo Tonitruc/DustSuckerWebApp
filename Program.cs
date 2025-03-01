@@ -1,8 +1,11 @@
 using DustSuckerWebApp.DataLayer;
 using DustSuckerWebApp.Extensions;
-using DustSuckerWebApp.ServiceLayer;
+using DustSuckerWebApp.ServiceLayer.AdvertisementsServices;
+using DustSuckerWebApp.ServiceLayer.HoverServices;
+using DustSuckerWebApp.ServiceLayer.UserServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,23 +28,23 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "Описание API",
     });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
 app.UseRouting();
 
-
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        options.RoutePrefix = string.Empty; 
-    });
-
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    options.RoutePrefix = string.Empty;
+});
 
 app.UseAuthorization();
 

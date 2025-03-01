@@ -1,4 +1,5 @@
-﻿using DustSuckerWebApp.ServiceLayer;
+﻿using DustSuckerWebApp.ServiceLayer.AdvertisementsServices;
+using DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject;
 using DustSuckerWebApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -17,15 +18,32 @@ namespace DustSuckerWebApp.Controllers
             _service = advertisementService;
         }
 
+        /// <summary>
+        /// Get list of advertisement with filter, sort and pagination.
+        /// </summary>
+        /// <param name="pageNum">Page number, if you need all the data, do not specify.</param>
+        /// <param name="pageSize">Page size.</param>
+        /// <param name="sortedBy">Sort: costAscending, costDescending, rating, publishDate. Or as in the database</param>
+        /// <param name="queries">Filter params.</param>
+        /// <returns>List of advertisement.</returns>
         [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var hooversList = await _service.GetAsync();
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AdvertisementDto>))]
+        public async Task<IActionResult> Get(int? pageNum, int? pageSize, 
+            string? sortedBy, 
+            [FromQuery] AdvertisementFilterParameters queries)
+        { 
+            var hooversList = await _service.GetAsync(pageNum, pageSize, sortedBy, queries);
 
             return Ok(hooversList);
         }
 
+        /// <summary>
+        /// Get advertisement by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdvertisementDto))]
         public async Task<IActionResult> GetById(int id)
         {
             var hoover = await _service.GetByIdAsync(id);
@@ -37,7 +55,13 @@ namespace DustSuckerWebApp.Controllers
             return Ok(hoover);
         }
 
+        /// <summary>
+        /// Get advertisement by title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         [HttpGet("{title}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdvertisementDto))]
         public async Task<IActionResult> GetByTitle(string title)
         {
             var hoover = await _service.GetByTitleAsync(title);
@@ -49,16 +73,32 @@ namespace DustSuckerWebApp.Controllers
             return Ok(hoover);
         }
 
+        /// <summary>
+        /// Get list of advertisement with filter, sort and pagination.
+        /// </summary>
+        /// <param name="pageNum">Page number, if you need all the data, do not specify.</param>
+        /// <param name="pageSize">Page size.</param>
+        /// <param name="sortedBy">Sort: costAscending, costDescending, rating, publishDate. Or as in the database</param>
+        /// <param name="queries">Filter params.</param>
+        /// <returns>List of advertisement.</returns>
         [HttpGet("short")]
-        public async Task<IActionResult> GetShort()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AdvertisementShortDto>))]
+        public async Task<IActionResult> GetShort(int? pageNum, int? pageSize,
+            string? sortedBy,
+            [FromQuery] AdvertisementFilterParameters queries)
         {
-            var hooversList = await _service.GetShortAsync();
+            var hooversList = await _service.GetShortAsync(pageNum, pageSize, sortedBy, queries);
 
             return Ok(hooversList);
         }
 
-
+        /// <summary>
+        /// Get short info about advertisement by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("short/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdvertisementShortDto))]
         public async Task<IActionResult> GetShortById(int id)
         {
             var hoover = await _service.GetShortByIdAsync(id);
@@ -70,7 +110,13 @@ namespace DustSuckerWebApp.Controllers
             return Ok(hoover);
         }
 
+        /// <summary>
+        /// Get short info about advertisement by id
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         [HttpGet("short/{title}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdvertisementShortDto))]             
         public async Task<IActionResult> GetShortByTitle(string title)
         {
             var hoover = await _service.GetShortByTitleAsync(title);
@@ -146,6 +192,12 @@ namespace DustSuckerWebApp.Controllers
             return Ok(res);
         }
 
+        /// <summary>
+        /// Set main image from list of added images for advertisement
+        /// </summary>
+        /// <param name="title">Title of advertisement</param>
+        /// <param name="imagesUrl">Exist image in list of images</param>
+        /// <returns></returns>
         [HttpPatch("set-main_image/{title}")]
         public async Task<IActionResult> SetAsTitleImageByTitle(string title, string imagesUrl)
         {

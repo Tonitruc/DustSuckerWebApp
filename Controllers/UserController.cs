@@ -1,4 +1,4 @@
-﻿using DustSuckerWebApp.ServiceLayer;
+﻿using DustSuckerWebApp.ServiceLayer.UserServices;
 using DustSuckerWebApp.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

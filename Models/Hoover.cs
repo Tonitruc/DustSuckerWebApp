@@ -29,20 +29,20 @@ namespace DustSuckerWebApp.Models
             "Аквафильтр" // Aquafilter
         };
 
-            public static readonly List<string> TubeTypes = new()
+        public static readonly List<string> TubeTypes = new()
         {
             "Цельная", // Solid
             "Составная", // Composite
             "Телескопическая" // Telescopic
         };
 
-            public static readonly List<string> FilterTypes = new()
+        public static readonly List<string> FilterTypes = new()
         {
             "Пылесборник", // DustCollector
             "Моторный" // Motor
         };
 
-            public static readonly List<string> PowerTypes = new()
+        public static readonly List<string> PowerTypes = new()
         {
             "Аккумулятор", // Battery
             "Источник питания", // PowerSupply

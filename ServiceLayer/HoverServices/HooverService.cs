@@ -5,7 +5,7 @@ using DustSuckerWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ServiceLayer
+namespace DustSuckerWebApp.ServiceLayer.HoverServices
 {
     public class HooverService
     {
@@ -41,7 +41,7 @@ namespace DustSuckerWebApp.ServiceLayer
 
             var result = await _context.AddAsync(_mapper.Map<Hoover>(dto));
             var errors = await _context.SaveChangeWithValidationAsync();
-            if(!errors.IsEmpty)
+            if (!errors.IsEmpty)
                 throw new ValidationException(errors.First().ErrorMessage);
 
             return result.Entity;

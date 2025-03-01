@@ -31,7 +31,7 @@ namespace DustSuckerWebApp.Extensions
 
         public static object? FromDisplayName(this string displayName, Type enumType)
         {
-            if (!enumType.IsEnum) throw new ArgumentException("Тип должен быть Enum", nameof(enumType));
+            if (!enumType.IsEnum) throw new ArgumentException("Only enum", nameof(enumType));
 
             return Enum.GetValues(enumType)
                        .Cast<object>()

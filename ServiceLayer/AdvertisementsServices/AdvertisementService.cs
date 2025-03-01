@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using DustSuckerWebApp.DataLayer;
 using DustSuckerWebApp.Models;
+using DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject;
 using DustSuckerWebApp.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
-namespace DustSuckerWebApp.ServiceLayer
+namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices
 {
     public class AdvertisementService
     {
@@ -21,23 +23,34 @@ namespace DustSuckerWebApp.ServiceLayer
             _mapper = mapper;
         }
 
-        public async Task<List<AdvertisementDto>> GetAsync()
-        {
+        public async Task<List<AdvertisementDto>> GetAsync(int? pageNum, int? pageSize, 
+            string? sortedBy, 
+            [FromQuery] AdvertisementFilterParameters queries)
+        { 
             return await _context.Advertisements
+                .AsNoTracking()
                 .Include(ad => ad.Hoover)
+                .FilterAdvertisementsBy(queries)
+                .SortAdvertisementsBy(sortedBy)
                 .Select(ad => _mapper.Map<AdvertisementDto>(ad)).ToListAsync();
         }
 
-        public async Task<List<AdvertisementShortDto>> GetShortAsync()
+        public async Task<List<AdvertisementShortDto>> GetShortAsync(int? pageNum, int? pageSize,
+            string? sortedBy,
+            [FromQuery] AdvertisementFilterParameters queries)
         {
             return await _context.Advertisements
+                .AsNoTracking()
                 .Include(ad => ad.Hoover)
+                .FilterAdvertisementsBy(queries)
+                .SortAdvertisementsBy(sortedBy)
                 .Select(ad => _mapper.Map<AdvertisementShortDto>(ad)).ToListAsync();
         }
 
         public async Task<AdvertisementDto?> GetByIdAsync(int id)
         {
             var exist = await _context.Advertisements
+                .AsNoTracking()
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Id == id);
             if (exist == null) return null;
@@ -48,6 +61,7 @@ namespace DustSuckerWebApp.ServiceLayer
         public async Task<AdvertisementDto?> GetByTitleAsync(string title)
         {
             var exist = await _context.Advertisements
+                .AsNoTracking()
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Title == title);
             if (exist == null) return null;
@@ -60,7 +74,7 @@ namespace DustSuckerWebApp.ServiceLayer
             var exist = await _context.Advertisements
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if(exist == null) return null;
+            if (exist == null) return null;
 
             return _mapper.Map<AdvertisementShortDto>(exist);
         }
@@ -77,11 +91,12 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<List<string>?> AddImageUrlByIdAsync(int id, string imageUrl)
         {
-            var exist = await GetByIdAsync(id);
+            var exist = await _context.Advertisements
+               .SingleOrDefaultAsync(ad => ad.Id == id);
 
             if (exist == null) return null;
 
-            if(!exist.ImageUrls.Contains(imageUrl))
+            if (!exist.ImageUrls.Contains(imageUrl))
                 exist.ImageUrls.Add(imageUrl);
 
             await _context.SaveChangesAsync();
@@ -120,7 +135,8 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<bool?> SetAsMainImageByIdAsync(int id, string imageUrl)
         {
-            var exist = await GetByIdAsync(id);
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Id == id);
 
             if (exist == null) return null;
 
@@ -133,7 +149,8 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<List<string>?> AddImageUrlByTitleAsync(string title, string imageUrl)
         {
-            var exist = await GetByTitleAsync(title);
+            var exist = await _context.Advertisements
+               .SingleOrDefaultAsync(ad => ad.Title == title);
 
             if (exist == null) return null;
 
@@ -145,7 +162,8 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<List<string>?> RemoveImageUrlByTitleAsync(string title, string imageUrl)
         {
-            var exist = await GetByTitleAsync(title);
+            var exist = await _context.Advertisements
+               .SingleOrDefaultAsync(ad => ad.Title == title);
 
             if (exist == null) return null;
 
@@ -157,7 +175,8 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<bool?> SetAsMainImageByTitleAsync(string title, string imageUrl)
         {
-            var exist = await GetByTitleAsync(title);
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Title == title);
 
             if (exist == null) return null;
 
@@ -170,7 +189,8 @@ namespace DustSuckerWebApp.ServiceLayer
 
         public async Task<AddAdvertisementDto?> AddAsync(AddAdvertisementDto dto)
         {
-            var exist = await GetByTitleAsync(dto.Title);
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Title == dto.Title);
 
             if (exist != null)
                 throw new ValidationException("The title for one ad must be enique.");
