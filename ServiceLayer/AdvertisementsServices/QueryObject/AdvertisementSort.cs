@@ -1,5 +1,6 @@
 ﻿using DustSuckerWebApp.Extensions;
 using DustSuckerWebApp.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,10 +22,10 @@ namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject
             var sortedByEnum = sortBy?.FromDisplayName<SortedBy>();
             return sortedByEnum switch
             {
-                SortedBy.CostAscending => query.OrderBy(ad => ad.Cost),
-                SortedBy.CostDescending => query.OrderByDescending(ad => ad.Cost),
+                SortedBy.CostAscending => query.OrderBy(ad => EF.Functions.Collate(ad.Cost.ToString(), "NOCASE")),
+                SortedBy.CostDescending => query.OrderByDescending(ad => EF.Functions.Collate(ad.Cost.ToString(), "NOCASE")),
                 SortedBy.Rating => query.OrderByDescending(ad => ad.Hoover.DustBagType),
-                SortedBy.PublishDate => query.OrderBy(query => query.PublishDate),
+                SortedBy.PublishDate => query.OrderByDescending(query => query.PublishDate),
                 _ => query
             };
                
