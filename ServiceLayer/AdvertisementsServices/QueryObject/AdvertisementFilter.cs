@@ -1,12 +1,14 @@
-﻿using DustSuckerWebApp.Models;
+﻿using DataLayer.Models;
 
-namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject
+namespace ServiceLayer.AdvertisementsServices.QueryObject
 {
     public static class AdvertisementFilter
     {
         public static IQueryable<Advertisement> FilterAdvertisementsBy(this IQueryable<Advertisement> query,
-            AdvertisementFilterParameters queryParams)
+            AdvertisementFilterParameters? queryParams)
         {
+            if (queryParams == null) return query;
+
             if (queryParams.Brand != null)
                 query = query.Where(ad => ad.Hoover.Brand == queryParams.Brand);
 

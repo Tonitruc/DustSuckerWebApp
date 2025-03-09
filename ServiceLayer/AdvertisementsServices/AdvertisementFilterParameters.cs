@@ -1,4 +1,4 @@
-﻿namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices
+﻿namespace ServiceLayer.AdvertisementsServices
 {
     /// <summary>
     /// Defines the filtering options for advertisements.

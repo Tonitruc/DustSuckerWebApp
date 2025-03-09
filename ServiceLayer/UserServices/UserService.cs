@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DustSuckerWebApp.DataLayer;
-using DustSuckerWebApp.Models;
-using DustSuckerWebApp.ViewModels;
+using DataLayer.EFCores;
+using DataLayer.Models;
+using ViewModels.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ServiceLayer.UserServices
+namespace ServiceLayer.UserServices
 {
     public class UserService
     {

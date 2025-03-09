@@ -1,15 +1,14 @@
-﻿using DustSuckerWebApp.Extensions;
-using DustSuckerWebApp.Models;
+﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ServiceLayer.Extensions;
 
-namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject
+namespace ServiceLayer.AdvertisementsServices.QueryObject
 {
     public enum SortedBy : byte
     {
-        [Display(Name = "costAscending")] CostAscending,
-        [Display(Name = "costDescanding")] CostDescending,
+        [Display(Name = "CostAscending")] CostAscending,
+        [Display(Name = "CostDescanding")] CostDescending,
         [Display(Name = "Rating")] Rating,
         [Display(Name = "PublishDate")] PublishDate
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DustSuckerWebApp.DataLayer
+namespace DataLayer.EFCores
 {
     public class ValidationDbContextServiceProvider : IServiceProvider
     {

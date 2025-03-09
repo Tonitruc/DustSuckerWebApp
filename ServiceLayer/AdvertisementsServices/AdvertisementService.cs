@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using DustSuckerWebApp.DataLayer;
-using DustSuckerWebApp.Models;
-using DustSuckerWebApp.ServiceLayer.AdvertisementsServices.QueryObject;
-using DustSuckerWebApp.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+using DataLayer.Models;
+using ServiceLayer.AdvertisementsServices.QueryObject;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using DataLayer.EFCores;
+using ViewModels.ViewModels;
 
-namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices
+namespace ServiceLayer.AdvertisementsServices
 {
     public class AdvertisementService
     {
@@ -23,9 +22,9 @@ namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices
             _mapper = mapper;
         }
 
-        public async Task<List<AdvertisementDto>> GetAsync(int? pageNum, int? pageSize, 
-            string? sortedBy, 
-            [FromQuery] AdvertisementFilterParameters queries)
+        public async Task<List<AdvertisementDto>> GetAsync(int? pageNum = null, int? pageSize = null, 
+            string? sortedBy = null, 
+            AdvertisementFilterParameters? queries = null)
         { 
             return await _context.Advertisements
                 .AsNoTracking()
@@ -37,7 +36,7 @@ namespace DustSuckerWebApp.ServiceLayer.AdvertisementsServices
 
         public async Task<List<AdvertisementShortDto>> GetShortAsync(int? pageNum, int? pageSize,
             string? sortedBy,
-            [FromQuery] AdvertisementFilterParameters queries)
+            AdvertisementFilterParameters queries)
         {
             return await _context.Advertisements
                 .AsNoTracking()

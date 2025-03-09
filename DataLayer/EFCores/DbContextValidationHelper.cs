@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.DataLayer
+namespace DataLayer.EFCores
 {
     public static class DbContextValidationHelper
     {

@@ -1,9 +1,10 @@
-﻿using DustSuckerWebApp.Models;
+﻿using DataLayer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DustSuckerWebApp.DataLayer
+namespace DataLayer.EFCores
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         
@@ -11,7 +12,5 @@ namespace DustSuckerWebApp.DataLayer
         public DbSet<Hoover> Hoovers { get; set; }
 
         public DbSet<Advertisement> Advertisements { get; set; }
-
-        public DbSet<User> Users { get; set; }
     }
 }
