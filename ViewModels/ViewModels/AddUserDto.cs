@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ViewModels
+namespace ViewModels.ViewModels
 {
     public class AddUserDto
     {

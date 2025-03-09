@@ -1,7 +1,7 @@
-﻿using DustSuckerWebApp.Models;
+﻿using DataLayer.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ViewModels
+namespace ViewModels.ViewModels
 {
     public class HooverShortDto
     {

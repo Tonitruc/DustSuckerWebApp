@@ -1,6 +1,9 @@
-﻿namespace DustSuckerWebApp.ViewModels
+﻿using DataLayer.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace ViewModels.ViewModels
 {
-    public class AdvertisementShortDto
+    public class AdvertisementDto
     {
         public string Title { get; set; }
 
@@ -12,16 +15,16 @@
 
         public string PublishDate { get; set; }
 
-        public string? MainImageUrl { get; set; }
+        public List<string> ImageUrls { get; set; }
 
-        public int HooverId { get; set; }
+        public HooverShortDto Hoover { get; set; }
 
-
-        public AdvertisementShortDto()
+        public AdvertisementDto()
         {
             Title = string.Empty;
             Description = string.Empty;
             Status = string.Empty;
+            ImageUrls = [];
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DustSuckerWebApp.Models;
+using DataLayer.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace DustSuckerWebApp.ViewModels
+namespace ViewModels.ViewModels
 {
     [AutoMap(typeof(Hoover))]
     /// <summary>
