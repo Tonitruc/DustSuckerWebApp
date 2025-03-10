@@ -2,6 +2,7 @@
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
 {
@@ -26,7 +27,6 @@ namespace DustSuckerWebApi.Controllers
             return Ok(hooversList);
         }
 
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -39,6 +39,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(hoover);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddHooverDto dto)
         {
@@ -54,6 +55,7 @@ namespace DustSuckerWebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {

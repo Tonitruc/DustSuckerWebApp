@@ -1,0 +1,6 @@
+@DustSuckerImageApi_HostAddress = http://localhost:5104
+
+GET {{DustSuckerImageApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -12,5 +12,7 @@ namespace DataLayer.EFCores
         public DbSet<Hoover> Hoovers { get; set; }
 
         public DbSet<Advertisement> Advertisements { get; set; }
+
+        public DbSet<Favorite> Favorites { get; set; }
     }
 }

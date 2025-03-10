@@ -1,0 +1,21 @@
+﻿.fixed-top {
+    position: fixed;
+    top: 1px;
+    width: 100%;
+    z-index: 1000;
+    background-color: white; /* Чтобы не было прозрачности */
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+a {
+    color: #0077cc;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}

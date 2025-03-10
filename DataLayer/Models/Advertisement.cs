@@ -6,7 +6,6 @@ namespace DataLayer.Models
     {
         public static List<string> AddvertisementsStatus = [
             "Active",
-            "Disable",
             "Hide"
             ];
     }
@@ -54,7 +53,7 @@ namespace DataLayer.Models
             if (!AdvertisementsAttributes.AddvertisementsStatus
                         .Any(s => s.Equals(Status, StringComparison.OrdinalIgnoreCase)))
             {
-                yield return new ValidationResult("Ad status can accept one of the states: Hide, Disable, Active");
+                yield return new ValidationResult("Ad status can accept one of the states: Disable, Active");
             }
         }
     }
