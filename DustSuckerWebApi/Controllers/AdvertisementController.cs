@@ -1,8 +1,8 @@
 ﻿using ServiceLayer.AdvertisementsServices;
-using ServiceLayer.AdvertisementsServices.QueryObject;
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
 {
@@ -128,6 +128,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(hoover);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddAdvertisementDto dto)
         {
@@ -142,6 +143,7 @@ namespace DustSuckerWebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("add-image/{id:int}")]
         public async Task<IActionResult> AddImageUrl(int id, [FromQuery] string imageUrl)
         {
@@ -152,6 +154,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPatch("remove-image/{id:int}")]
         public async Task<IActionResult> RemoveImageUrl(int id, [FromQuery] string imageUrl)
         {
@@ -162,6 +165,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPatch("add-image/{title}")]
         public async Task<IActionResult> AddImageUrl(string title, [FromQuery] string imageUrl)
         {
@@ -172,6 +176,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPatch("add-images/{id}")]
         public async Task<IActionResult> AddImageUrl(int id, [FromBody] List<string> imagesUrls)
         {
@@ -182,6 +187,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPatch("set-main_image/{id:int}")]
         public async Task<IActionResult> SetAsTitleImageById(int id, string imagesUrl)
         {
@@ -198,6 +204,7 @@ namespace DustSuckerWebApi.Controllers
         /// <param name="title">Title of advertisement</param>
         /// <param name="imagesUrl">Exist image in list of images</param>
         /// <returns></returns>
+        [Authorize]
         [HttpPatch("set-main_image/{title}")]
         public async Task<IActionResult> SetAsTitleImageByTitle(string title, string imagesUrl)
         {
@@ -208,7 +215,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
-
+        [Authorize]
         [HttpPatch("remove-image/{title}")]
         public async Task<IActionResult> RemoveImageUrl(string title, [FromQuery] string imageUrl)
         {
@@ -219,7 +226,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(res);
         }
 
-
+        [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -231,6 +238,7 @@ namespace DustSuckerWebApi.Controllers
             return BadRequest("Invalid id");
         }
 
+        [Authorize]
         [HttpDelete("{title}")]
         public async Task<IActionResult> Delete(string title)
         {

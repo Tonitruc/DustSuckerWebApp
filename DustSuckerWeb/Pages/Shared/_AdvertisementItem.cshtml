@@ -1,0 +1,39 @@
+﻿@using ViewModels.ViewModels
+@model AdvertisementDto
+
+<div class="column product-card">
+
+    <div class="col-3 product-image">
+        <img class="img-fluid" src="@Model.ImageUrls[0]">
+    </div>
+
+    <div class="col-5 product-info">
+        <h5 class="product-title">@Model.Title</h5>
+
+        <div class="availability d-inline-flex align-items-center">
+            <img class="mr-6" height="20" src="/svgs/has.svg" />
+            <span class="ms-2">В наличии</span>
+        </div>
+        <p><strong>Модель:</strong> @Model.Hoover.Model</p>
+        <p><strong>Производитель:</strong> @Model.Hoover.Brand</p>
+        <p><strong>Тип:</strong> @Model.Hoover.Type</p>
+        <p><strong>Тип питания:</strong> @Model.Hoover.PowerType</p>
+        <p><strong>Тип уборки:</strong> @Model.Hoover.CleaningType</p>
+        <p><strong>Тип мешка:</strong> @Model.Hoover.DustBagType</p>
+    </div>
+
+    <div class="col-4 test-container">
+        <div class="rating-container">
+            <span>4.9</span>
+            <img height="20" src="/svgs/fillStar.svg"/>
+        </div>
+
+        <div class="buy-info-container">
+            <p class="price">
+                <span class="current-price">@Model.Cost BYN</span>
+            </p>
+            <button class="buy-button">В корзину</button>
+        </div>
+    </div>
+
+</div>

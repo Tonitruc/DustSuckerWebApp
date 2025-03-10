@@ -2,7 +2,6 @@
 bin
 obj 
 appsettings.Development.json
-*.sln
 *.user
 Properties
 Migrations
@@ -10,3 +9,5 @@ DustSuckerDB
 DustSuckerDB-shm
 DustSuckerDB-wal
 *.config
+*.idea
+**lib

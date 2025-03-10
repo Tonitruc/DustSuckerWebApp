@@ -11,4 +11,12 @@
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="CartService\" />
+	</ItemGroup>
+
 </Project>
