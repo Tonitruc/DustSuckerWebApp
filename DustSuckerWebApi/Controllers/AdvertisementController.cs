@@ -105,7 +105,7 @@ namespace DustSuckerWebApi.Controllers
             return Ok(hoover);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddAdvertisementDto dto)
         {
