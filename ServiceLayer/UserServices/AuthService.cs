@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace ServiceLayer.UserServices
 {
@@ -48,6 +49,7 @@ namespace ServiceLayer.UserServices
                 FullName = model.FullName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
+                Cart = new()
             };
 
             var res = await _userManager.CreateAsync(existUser, model.Password);
@@ -66,9 +68,9 @@ namespace ServiceLayer.UserServices
             if(model.Email == null || model.Password == null)
                 throw new ValidationException("Cant be empty data!");
 
-            var existUser = await _userManager.FindByEmailAsync(model.Email);
-
-            if (existUser == null) return null;
+            var existUser = await _userManager.FindByEmailAsync(model.Email)
+                ?? throw new ValidationException($"User with email {model.Email} don't exists.");
+                
 
             var res = await _userManager.CheckPasswordAsync(existUser, model.Password);
 
@@ -81,6 +83,20 @@ namespace ServiceLayer.UserServices
                 PhoneNumber = existUser.PhoneNumber,
                 FullName = existUser.FullName
             };
+        }
+
+        public async Task<bool?> DeleteUserAsync(string email)
+        {
+            var existUser = await _userManager.Users
+                .Include(u => u.Cart)
+                .SingleOrDefaultAsync(u => u.Email == email)
+                ?? throw new ValidationException($"User with email {email} don't exists.");
+
+            _context.Carts.Remove(existUser.Cart);
+
+            await _context.SaveChangesAsync();
+            await _userManager.DeleteAsync(existUser);
+            return true;
         }
 
         private string GenerateJwtToken(User user, IConfiguration config)

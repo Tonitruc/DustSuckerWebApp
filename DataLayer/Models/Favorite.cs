@@ -2,7 +2,7 @@
 
 namespace DataLayer.Models
 {
-    public class Favorite
+    public class Cart
     {
         [Key]
         public int Id { get; set; }
@@ -11,7 +11,7 @@ namespace DataLayer.Models
 
         public ICollection<Advertisement> Advertisements { get; set; }
 
-        public Favorite()
+        public Cart()
         {
             Advertisements = [];
         }

@@ -52,9 +52,10 @@ namespace ServiceLayer.AdvertisementsServices
                 .AsNoTracking()
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if (exist == null) return null;
 
-            return _mapper.Map<AdvertisementDto>(exist);
+            return exist == null 
+                ? throw new ValidationException($"Invalid advertisement id: {id}")
+                : _mapper.Map<AdvertisementDto>(exist);
         }
 
         public async Task<AdvertisementDto?> GetByTitleAsync(string title)
@@ -63,9 +64,10 @@ namespace ServiceLayer.AdvertisementsServices
                 .AsNoTracking()
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Title == title);
-            if (exist == null) return null;
 
-            return _mapper.Map<AdvertisementDto>(exist);
+            return exist == null
+                ? throw new ValidationException($"Invalid advertisement id: {title}")
+                : _mapper.Map<AdvertisementDto>(exist);
         }
 
         public async Task<AdvertisementShortDto?> GetShortByIdAsync(int id)
@@ -73,9 +75,10 @@ namespace ServiceLayer.AdvertisementsServices
             var exist = await _context.Advertisements
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if (exist == null) return null;
 
-            return _mapper.Map<AdvertisementShortDto>(exist);
+            return exist == null 
+                ? throw new ValidationException($"Invalid advertisement id: {id}") 
+                : _mapper.Map<AdvertisementShortDto>(exist);
         }
 
         public async Task<AdvertisementShortDto?> GetShortByTitleAsync(string title)
@@ -83,17 +86,17 @@ namespace ServiceLayer.AdvertisementsServices
             var exist = await _context.Advertisements
                 .Include(e => e.Hoover)
                 .FirstOrDefaultAsync(a => a.Title == title);
-            if (exist == null) return null;
 
-            return _mapper.Map<AdvertisementShortDto>(exist);
+            return exist == null
+                ? throw new ValidationException($"Invalid advertisement title: {title}")
+                : _mapper.Map<AdvertisementShortDto>(exist);
         }
 
         public async Task<List<string>?> AddImageUrlByIdAsync(int id, string imageUrl)
         {
             var exist = await _context.Advertisements
-               .SingleOrDefaultAsync(ad => ad.Id == id);
-
-            if (exist == null) return null;
+               .SingleOrDefaultAsync(ad => ad.Id == id) 
+               ?? throw new ValidationException($"Invalid advertisement id: {id}");
 
             if (!exist.ImageUrls.Contains(imageUrl))
                 exist.ImageUrls.Add(imageUrl);
@@ -102,12 +105,11 @@ namespace ServiceLayer.AdvertisementsServices
             return exist.ImageUrls;
         }
 
-        public async Task<List<string>?> RemoveImageUrlByIdAsync(int id, string imageUrl)
+        public async Task<List<string>?> DeleteImageUrlByIdAsync(int id, string imageUrl)
         {
             var exist = await _context.Advertisements
-                .SingleOrDefaultAsync(ad => ad.Id == id);
-
-            if (exist == null) return null;
+                .SingleOrDefaultAsync(ad => ad.Id == id)
+                ?? throw new ValidationException($"Invalid advertisement id: {id}");
 
             exist.ImageUrls.Remove(imageUrl);
 
@@ -118,9 +120,8 @@ namespace ServiceLayer.AdvertisementsServices
         public async Task<List<string>?> AddImagesUrlByIdAsync(int id, List<string> imagesUrl)
         {
             var exist = await _context.Advertisements
-                .SingleOrDefaultAsync(ad => ad.Id == id);
-
-            if (exist == null) return null;
+                .SingleOrDefaultAsync(ad => ad.Id == id) 
+                ?? throw new ValidationException($"Invalid advertisement id: {id}");
 
             foreach (var imageUrl in imagesUrl)
             {
@@ -135,9 +136,8 @@ namespace ServiceLayer.AdvertisementsServices
         public async Task<bool?> SetAsMainImageByIdAsync(int id, string imageUrl)
         {
             var exist = await _context.Advertisements
-                .SingleOrDefaultAsync(ad => ad.Id == id);
-
-            if (exist == null) return null;
+                .SingleOrDefaultAsync(ad => ad.Id == id)
+                ?? throw new ValidationException($"Invalid advertisement id: {id}");
 
             exist.ImageUrls.Remove(imageUrl);
             exist.ImageUrls.Insert(0, imageUrl);
@@ -149,9 +149,8 @@ namespace ServiceLayer.AdvertisementsServices
         public async Task<List<string>?> AddImageUrlByTitleAsync(string title, string imageUrl)
         {
             var exist = await _context.Advertisements
-               .SingleOrDefaultAsync(ad => ad.Title == title);
-
-            if (exist == null) return null;
+               .SingleOrDefaultAsync(ad => ad.Title == title)
+               ?? throw new ValidationException($"Invalid advertisement title: {title}");
 
             if (!exist.ImageUrls.Contains(imageUrl))
                 exist.ImageUrls.Add(imageUrl);
@@ -159,12 +158,11 @@ namespace ServiceLayer.AdvertisementsServices
             return exist.ImageUrls;
         }
 
-        public async Task<List<string>?> RemoveImageUrlByTitleAsync(string title, string imageUrl)
+        public async Task<List<string>?> DeleteImageUrlByTitleAsync(string title, string imageUrl)
         {
             var exist = await _context.Advertisements
-               .SingleOrDefaultAsync(ad => ad.Title == title);
-
-            if (exist == null) return null;
+               .SingleOrDefaultAsync(ad => ad.Title == title)
+               ?? throw new ValidationException($"Invalid advertisement title: {title}");
 
             exist.ImageUrls.Remove(imageUrl);
 
@@ -175,9 +173,8 @@ namespace ServiceLayer.AdvertisementsServices
         public async Task<bool?> SetAsMainImageByTitleAsync(string title, string imageUrl)
         {
             var exist = await _context.Advertisements
-                .SingleOrDefaultAsync(ad => ad.Title == title);
-
-            if (exist == null) return null;
+                .SingleOrDefaultAsync(ad => ad.Title == title)
+                ?? throw new ValidationException($"Invalid advertisement title: {title}");
 
             exist.ImageUrls.Remove(imageUrl);
             exist.ImageUrls.Insert(0, imageUrl);
@@ -208,9 +205,9 @@ namespace ServiceLayer.AdvertisementsServices
 
         public async Task<bool> DeleteByIdAsync(int id)
         {
-            var exist = await GetByIdAsync(id);
-
-            if (exist == null) return false;
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Id == id)
+                ?? throw new ValidationException($"Invalid advertisement id: {id}");
 
             _context.Remove(exist);
             _context.SaveChanges();
@@ -219,9 +216,9 @@ namespace ServiceLayer.AdvertisementsServices
 
         public async Task<bool> DeleteByTitleAsync(string title)
         {
-            var exist = await GetByTitleAsync(title);
-
-            if (exist == null) return false;
+            var exist = await _context.Advertisements
+                .SingleOrDefaultAsync(ad => ad.Title == title)
+                ?? throw new ValidationException($"Invalid advertisement title: {title}");
 
             _context.Remove(exist);
             _context.SaveChanges();

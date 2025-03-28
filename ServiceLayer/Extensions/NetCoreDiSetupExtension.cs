@@ -13,6 +13,7 @@ namespace ServiceLayer.Extensions
             services.AddScoped<HooverService>();
             services.AddScoped<AdvertisementService>();
             services.AddScoped<AuthService>();
+            services.AddScoped<UserService>();
 
             services.AddAutoMapper(typeof(MappingProfile));
         }

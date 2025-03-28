@@ -13,6 +13,6 @@ namespace DataLayer.EFCores
 
         public DbSet<Advertisement> Advertisements { get; set; }
 
-        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Cart> Carts { get; set; }
     }
 }

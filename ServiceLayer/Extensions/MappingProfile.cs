@@ -32,6 +32,7 @@ namespace DustSuckerWebApi.Extensions
 
             CreateMap<AddUserDto, User>();
 
+            CreateMap<AddReviewDto, Review>();
         }
     }
 }

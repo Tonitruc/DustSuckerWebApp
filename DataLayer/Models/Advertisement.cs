@@ -40,12 +40,16 @@ namespace DataLayer.Models
         public Hoover Hoover { get; set; } 
 
 
+        public ICollection<Cart> Carts { get; set; }
+
+
         public Advertisement()
         {
             Title = string.Empty;
             Description = string.Empty;
             Status = string.Empty;
             ImageUrls = [];
+            Carts = [];
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

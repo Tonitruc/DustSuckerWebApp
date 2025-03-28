@@ -7,7 +7,6 @@ using DataLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +16,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddServiceLayerDi();
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options => 
+{
+    options.Password.RequiredLength = 8; 
+    options.Password.RequireNonAlphanumeric = false; 
+    options.Password.RequireDigit = false; 
+    options.Password.RequireLowercase = false; 
+    options.Password.RequireUppercase = false; 
+    options.Password.RequiredUniqueChars = 0; 
+})
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
+builder.Services.AddProblemDetails();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
@@ -61,8 +71,6 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddRazorPages();
-
 var app = builder.Build();
 
 app.UseRouting();
@@ -74,13 +82,10 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
+app.UseExceptionHandler(options => { });
+
 app.UseAuthorization();
 
-app.MapGet("/", () => "API is work");
 app.MapControllers();
-
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
 
 app.Run();

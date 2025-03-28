@@ -107,6 +107,7 @@ namespace DataLayer.Models
 
         public ICollection<Advertisement> Advertisements { get; set; }
 
+        public ICollection<Review> Reviews { get; set; }
 
         public Hoover()
         {

@@ -22,53 +22,54 @@ namespace DustSuckerWebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var hooversList = await _service.GetHoovers();
-
+            var hooversList = await _service.GetHooversAsync();
             return Ok(hooversList);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var hoover = await _service.GetHoover(id);
-            if(hoover == null)
-            {
-                return BadRequest("Invalid Id.");
-            }
-
+            var hoover = await _service.GetHooverByIdAsync(id);
             return Ok(hoover);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddHooverDto dto)
         {
-            try
-            {
-                var result = await _service.AddHoover(dto);
-                return Ok(result);
-            }
-            catch(ValidationException ex)
-            {
-                return BadRequest(new { Message = ex.Message, 
-                                        Errors = ex.ValidationResult });
-            }
+            var result = await _service.AddHooverAsync(dto);
+            return Ok(result);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            try
-            {
-                var result = await _service.Remove(id);
-                return Ok(result);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _service.DeleteByIdAsync(id);
+            return Ok(result);
         }
 
+        [HttpGet("{id}/reviews")]
+        public async Task<IActionResult> GetReviewsByid(int id)
+        {
+            var result = await _service.GetReviewsByIdAsync(id);
+            return Ok(result);
+        }
+
+        //[Authorize]
+        [HttpPatch("{id}/add-reviews")]
+        public async Task<IActionResult> AddReviewById(int id, [FromBody] AddReviewDto dto)
+        {
+            var result = await _service.AddReviewsByIdAsync(id, dto);
+            return Ok(result);
+        }
+
+        //[Authorize]
+        [HttpPatch("{id}/delete-reviews/{email}")]
+        public async Task<IActionResult> DeleteReviewById(int id, string email)
+        {
+            var result = await _service.RemoveReviewsByIdAsync(id, email);
+            return Ok(result);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
 {
@@ -18,7 +19,7 @@ namespace DustSuckerWebApi.Controllers
         }
 
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             var res = await _service.RegisterUserAsync(model);
@@ -28,23 +29,20 @@ namespace DustSuckerWebApi.Controllers
             return Ok(new { res.Succeeded, res.Errors });
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model
             ,[FromServices] IConfiguration config)
         {
-            try
-            {
-                var res = await _service.LoginUserAsync(model, config);
-                if(res == null)
-                    return BadRequest($"User with {model.Email} don't exists.");
+            var res = await _service.LoginUserAsync(model, config);
+            return Ok(res);
+        }
 
-                return Ok(res);
-
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        //[Authorize]
+        [HttpDelete("delete/{email}")]
+        public async Task<IActionResult> Delete(string email)
+        {
+            var res = await _service.DeleteUserAsync(email);
+            return Ok(res);
         }
     }
 }

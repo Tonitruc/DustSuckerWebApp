@@ -1,7 +1,6 @@
 ﻿using ServiceLayer.AdvertisementsServices;
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
@@ -33,7 +32,6 @@ namespace DustSuckerWebApi.Controllers
             [FromQuery] AdvertisementFilterParameters queries)
         { 
             var hooversList = await _service.GetAsync(pageNum, pageSize, sortedBy, queries);
-
             return Ok(hooversList);
         }
 
@@ -47,11 +45,6 @@ namespace DustSuckerWebApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var hoover = await _service.GetByIdAsync(id);
-            if (hoover == null)
-            {
-                return BadRequest("Invalid Id.");
-            }
-
             return Ok(hoover);
         }
 
@@ -65,11 +58,6 @@ namespace DustSuckerWebApi.Controllers
         public async Task<IActionResult> GetByTitle(string title)
         {
             var hoover = await _service.GetByTitleAsync(title);
-            if (hoover == null)
-            {
-                return BadRequest("Invalid Id.");
-            }
-
             return Ok(hoover);
         }
 
@@ -88,7 +76,6 @@ namespace DustSuckerWebApi.Controllers
             [FromQuery] AdvertisementFilterParameters queries)
         {
             var hooversList = await _service.GetShortAsync(pageNum, pageSize, sortedBy, queries);
-
             return Ok(hooversList);
         }
 
@@ -102,11 +89,6 @@ namespace DustSuckerWebApi.Controllers
         public async Task<IActionResult> GetShortById(int id)
         {
             var hoover = await _service.GetShortByIdAsync(id);
-            if (hoover == null)
-            {
-                return BadRequest("Invalid Id.");
-            }
-
             return Ok(hoover);
         }
 
@@ -120,11 +102,6 @@ namespace DustSuckerWebApi.Controllers
         public async Task<IActionResult> GetShortByTitle(string title)
         {
             var hoover = await _service.GetShortByTitleAsync(title);
-            if (hoover == null)
-            {
-                return BadRequest("Invalid Id.");
-            }
-
             return Ok(hoover);
         }
 
@@ -132,69 +109,47 @@ namespace DustSuckerWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddAdvertisementDto dto)
         {
-            try
-            {
-                var result = await _service.AddAsync(dto);
-                return Ok(result);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
+            var result = await _service.AddAsync(dto);
+            return Ok(result);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("add-image/{id:int}")]
         public async Task<IActionResult> AddImageUrl(int id, [FromQuery] string imageUrl)
         {
             var res = await _service.AddImageUrlByIdAsync(id, imageUrl);
-            if(res == null)
-                return BadRequest("Invalid advertisement id");
-
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("remove-image/{id:int}")]
-        public async Task<IActionResult> RemoveImageUrl(int id, [FromQuery] string imageUrl)
+        public async Task<IActionResult> DeleteImageUrl(int id, [FromQuery] string imageUrl)
         {
-            var res = await _service.RemoveImageUrlByIdAsync(id, imageUrl);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
+            var res = await _service.DeleteImageUrlByIdAsync(id, imageUrl);
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("add-image/{title}")]
         public async Task<IActionResult> AddImageUrl(string title, [FromQuery] string imageUrl)
         {
             var res = await _service.AddImageUrlByTitleAsync(title, imageUrl);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("add-images/{id}")]
         public async Task<IActionResult> AddImageUrl(int id, [FromBody] List<string> imagesUrls)
         {
             var res = await _service.AddImagesUrlByIdAsync(id, imagesUrls);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("set-main_image/{id:int}")]
         public async Task<IActionResult> SetAsTitleImageById(int id, string imagesUrl)
         {
             var res = await _service.SetAsMainImageByIdAsync(id, imagesUrl);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
             return Ok(res);
         }
 
@@ -204,49 +159,35 @@ namespace DustSuckerWebApi.Controllers
         /// <param name="title">Title of advertisement</param>
         /// <param name="imagesUrl">Exist image in list of images</param>
         /// <returns></returns>
-        [Authorize]
+        //[Authorize]
         [HttpPatch("set-main_image/{title}")]
         public async Task<IActionResult> SetAsTitleImageByTitle(string title, string imagesUrl)
         {
             var res = await _service.SetAsMainImageByTitleAsync(title, imagesUrl);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPatch("remove-image/{title}")]
-        public async Task<IActionResult> RemoveImageUrl(string title, [FromQuery] string imageUrl)
+        public async Task<IActionResult> DeleteImageUrl(string title, [FromQuery] string imageUrl)
         {
-            var res = await _service.RemoveImageUrlByTitleAsync(title, imageUrl);
-            if (res == null)
-                return BadRequest("Invalid advertisement id");
-
+            var res = await _service.DeleteImageUrlByTitleAsync(title, imageUrl);
             return Ok(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteById(int id)
         {
             var result = await _service.DeleteByIdAsync(id);
-
-            if(result)
-                return Ok(result);
-
             return BadRequest("Invalid id");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{title}")]
-        public async Task<IActionResult> Delete(string title)
+        public async Task<IActionResult> DeleteByTitle(string title)
         {
             var result = await _service.DeleteByTitleAsync(title);
-
-            if (result)
-                return Ok(result);
-
             return BadRequest("Invalid id");
         }
 
