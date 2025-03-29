@@ -44,6 +44,8 @@ namespace ServiceLayer.UserServices
             var existUser = await _userManager.Users
                 .Include(x => x.Cart)
                     .ThenInclude(f => f.Advertisements)
+                        .ThenInclude(ad => ad.Hoover)
+                            .ThenInclude(h => h.Reviews)
                 .FirstOrDefaultAsync(u => u.Email == email)
                 ?? throw new ValidationException($"User with email {email} don't exists.");
 
@@ -57,7 +59,8 @@ namespace ServiceLayer.UserServices
             var existUser = await _userManager.Users
                 .Include(x => x.Cart)
                     .ThenInclude(f => f.Advertisements)
-                        .ThenInclude(a => a.Hoover)
+                        .ThenInclude(ad => ad.Hoover)
+                            .ThenInclude(h => h.Reviews)
                 .FirstOrDefaultAsync(u => u.Email == email)
                 ?? throw new ValidationException($"User with email {email} don't exists.");
 

@@ -16,6 +16,9 @@
 
         public int HooverId { get; set; }
 
+        public double Rating { get; set; }
+
+        public double AmountReviews { get; set; }
 
         public AdvertisementShortDto()
         {

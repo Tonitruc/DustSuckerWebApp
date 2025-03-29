@@ -21,6 +21,9 @@ namespace ViewModels.ViewModels
 
         public double Weight { get; set; }
 
+        public double Rating { get; set; }
+
+        public double AmountReviews { get; set; }
 
         public HooverShortDto()
         {

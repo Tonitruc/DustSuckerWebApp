@@ -29,6 +29,7 @@ namespace ServiceLayer.AdvertisementsServices
             return await _context.Advertisements
                 .AsNoTracking()
                 .Include(ad => ad.Hoover)
+                    .ThenInclude(h => h.Reviews)
                 .FilterAdvertisementsBy(queries)
                 .SortAdvertisementsBy(sortedBy)
                 .Select(ad => _mapper.Map<AdvertisementDto>(ad)).ToListAsync();
@@ -41,6 +42,7 @@ namespace ServiceLayer.AdvertisementsServices
             return await _context.Advertisements
                 .AsNoTracking()
                 .Include(ad => ad.Hoover)
+                    .ThenInclude(h => h.Reviews)
                 .FilterAdvertisementsBy(queries)
                 .SortAdvertisementsBy(sortedBy)
                 .Select(ad => _mapper.Map<AdvertisementShortDto>(ad)).ToListAsync();
