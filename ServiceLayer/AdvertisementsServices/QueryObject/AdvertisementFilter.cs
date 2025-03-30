@@ -10,7 +10,7 @@ namespace ServiceLayer.AdvertisementsServices.QueryObject
             if (queryParams == null) return query;
 
             if (queryParams.Brand != null)
-                query = query.Where(ad => ad.Hoover.Brand == queryParams.Brand);
+                query = query.Where(ad => queryParams.Brand.Contains(ad.Hoover.Brand));
 
             if(queryParams.MinCost != null)
                 query = query.Where(ad => ad.Cost >= queryParams.MinCost);
@@ -19,13 +19,13 @@ namespace ServiceLayer.AdvertisementsServices.QueryObject
                 query = query.Where(ad => ad.Cost <= queryParams.MaxCost);
 
             if (queryParams.HooverType != null)
-                query = query.Where(ad => ad.Hoover.Type == queryParams.HooverType);
+                query = query.Where(ad => queryParams.HooverType.Contains(ad.Hoover.Type));
 
             if (queryParams.PowerType != null)
-                query = query.Where(ad => ad.Hoover.PowerType == queryParams.PowerType);
+                query = query.Where(ad => queryParams.PowerType.Contains(ad.Hoover.PowerType));
 
             if (queryParams.CleaningType != null)
-                query = query.Where(ad => ad.Hoover.CleaningType == queryParams.CleaningType);
+                query = query.Where(ad => queryParams.CleaningType.Contains(ad.Hoover.CleaningType));
 
             return query;
         }

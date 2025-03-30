@@ -1,7 +1,6 @@
 ﻿using ServiceLayer.AdvertisementsServices;
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
 {

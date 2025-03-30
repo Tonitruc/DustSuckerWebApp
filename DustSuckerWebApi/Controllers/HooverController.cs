@@ -1,8 +1,6 @@
 ﻿using ServiceLayer.HoverServices;
 using ViewModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DustSuckerWebApi.Controllers
 {
