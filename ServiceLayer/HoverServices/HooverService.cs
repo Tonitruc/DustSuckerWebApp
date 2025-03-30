@@ -25,20 +25,26 @@ namespace ServiceLayer.HoverServices
         }
 
 
-        public async Task<List<Hoover>> GetHooversAsync()
+        public async Task<List<HooverDto>> GetHooversAsync()
         {
-            return await _context.Hoovers.ToListAsync();
+            return await _context.Hoovers.AsNoTracking().Include(h => h.Reviews)
+                .Select(h => _mapper.Map<HooverDto>(h)).ToListAsync();
         }
 
-        public async Task<Hoover?> GetHooverByIdAsync(int id)
+        public async Task<HooverDto> GetHooverByIdAsync(int id)
         {
-            var exist = await _context.Hoovers.SingleOrDefaultAsync(h => h.Id == id);
-            return exist == null 
-                ? exist
-                : throw new ValidationException($"Invalid hoover ip: {id}");
+            var exist = await _context.Hoovers
+                .AsNoTracking()
+                .Include(h => h.Reviews)
+                .SingleOrDefaultAsync(h => h.Id == id);
+
+            if (exist == null)
+                throw new ValidationException($"Invalid id: {id}");
+
+            return _mapper.Map<HooverDto>(exist);
         }
 
-        public async Task<Hoover?> AddHooverAsync(AddHooverDto dto)
+        public async Task<HooverDto> AddHooverAsync(AddHooverDto dto)
         {
             var exist = await _context.Hoovers
                 .SingleOrDefaultAsync(e => e.Model == dto.Model && e.Brand == dto.Brand)
@@ -49,7 +55,7 @@ namespace ServiceLayer.HoverServices
             if (!errors.IsEmpty)
                 throw new ValidationException(errors.First().ErrorMessage);
 
-            return result.Entity;
+            return _mapper.Map<HooverDto>(exist);
         }
 
         public async Task<bool> DeleteByIdAsync(int id)

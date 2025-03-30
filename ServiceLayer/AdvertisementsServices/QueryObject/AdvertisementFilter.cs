@@ -10,7 +10,7 @@ namespace ServiceLayer.AdvertisementsServices.QueryObject
             if (queryParams == null) return query;
 
             if (queryParams.Brand != null)
-                query = query.Where(ad => queryParams.Brand.Contains(ad.Hoover.Brand));
+                query = query.Where(ad => ad.Title.Contains(queryParams.Brand));
 
             if(queryParams.MinCost != null)
                 query = query.Where(ad => ad.Cost >= queryParams.MinCost);

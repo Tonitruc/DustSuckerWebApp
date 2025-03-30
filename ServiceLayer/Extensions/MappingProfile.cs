@@ -40,6 +40,13 @@ namespace DustSuckerWebApi.Extensions
             CreateMap<AddUserDto, User>();
 
             CreateMap<AddReviewDto, Review>();
+
+            CreateMap<AddUserDto, User>();
+
+            CreateMap<Hoover, HooverDto>()
+                .ForMember(dest => dest.AmountReviews, opt => opt.MapFrom(src => src.Reviews.Count))
+                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src
+                    => src.Reviews.Count == 0 ? 0 : src.Reviews.Select(r => r.Rating).Average()));
         }
     }
 }
