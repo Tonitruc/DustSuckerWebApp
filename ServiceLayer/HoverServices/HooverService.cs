@@ -27,7 +27,7 @@ namespace ServiceLayer.HoverServices
 
         public async Task<List<HooverDto>> GetHooversAsync()
         {
-            return await _context.Hoovers.AsNoTracking().Include(h => h.Reviews)
+            return await _context.Hoovers.AsNoTracking().Include(h => h.Reviews).ThenInclude(r => r.User)
                 .Select(h => _mapper.Map<HooverDto>(h)).ToListAsync();
         }
 
@@ -36,6 +36,7 @@ namespace ServiceLayer.HoverServices
             var exist = await _context.Hoovers
                 .AsNoTracking()
                 .Include(h => h.Reviews)
+                .ThenInclude(r => r.User)
                 .SingleOrDefaultAsync(h => h.Id == id);
 
             if (exist == null)

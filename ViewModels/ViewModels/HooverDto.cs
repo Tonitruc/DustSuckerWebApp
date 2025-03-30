@@ -41,7 +41,7 @@ namespace ViewModels.ViewModels
         public double Rating { get; set; }
 
 
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<AddReviewDto> Reviews { get; set; }
 
         public HooverDto()
         {

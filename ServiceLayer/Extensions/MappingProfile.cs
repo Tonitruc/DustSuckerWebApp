@@ -47,6 +47,9 @@ namespace DustSuckerWebApi.Extensions
                 .ForMember(dest => dest.AmountReviews, opt => opt.MapFrom(src => src.Reviews.Count))
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src
                     => src.Reviews.Count == 0 ? 0 : src.Reviews.Select(r => r.Rating).Average()));
+
+            CreateMap<Review, AddReviewDto>()
+                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email));
         }
     }
 }
